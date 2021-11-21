@@ -3,9 +3,11 @@ const mongoose = require("mongoose");
 //// this is a Schema for posts
 const postsSchema = new mongoose.Schema({
   artical: { type: String, required: true },
-  photos : { type: String},
-
-  // writer : {}
+  photo: { type: String },
+  secPhoto: { type: String },
+  video: { type: String },
+  date: { type: Date, default: Date.now },
+  writer: { type: mongoose.Schema.Types.ObjectId, ref: "Designer" },
 });
 
 
