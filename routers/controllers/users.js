@@ -1,35 +1,26 @@
 const userModel = require("./../../db/models/userSchema");
 
-
-
-
-
-
-///// a function to create an account => new user
-const createAccFunc = (req, res) => {
-  const { userName, userEmail, password, name } = req.body;
-
-  const newUser = new userModel({
-    userName,
-    userEmail,
-    password,
-    name,
+////// Regester function => create a new user account
+const registerFunction = (req, res) => {
+  //// But first it will check if the Email already exists or not
+  userModel.findOne({ userEmail: req.body.userEmail }).then((user) => {
+    if (user) {
+      return res.status(404).send({ email: " This Email has been taken! " });
+      //// de not case :
+    } else {
+      const newUser = new userModel({
+        userName: req.body.userName,
+        userEmail: req.body.userEmail,
+        password: req.body.password,
+      });
+      newUser.save();
+      return res.status(200).json(newUser);
+    }
   });
-  console.log(newUser);
-
-  newUser
-    .save()
-    .then((result) => {
-      console.log(result);
-      res.json(result);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.send(err);
-    });
 };
 
 ///// a functon to get all users
+/// i create this function just to check if my functions are doing well or nah hehe
 const getAllUsers = (req, res) => {
   userModel
     .find({})
@@ -41,4 +32,4 @@ const getAllUsers = (req, res) => {
     });
 };
 
-module.exports = { createAccFunc, getAllUsers };
+module.exports = { registerFunction, getAllUsers };
