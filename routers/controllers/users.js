@@ -1,6 +1,6 @@
 // const { brotliCompressSync } = require("zlib");
 const userModel = require("./../../db/models/userSchema");
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcrypt");
 ////// Regester function => create a new user account
 const registerFunction = async (req, res) => {
   try {
@@ -17,8 +17,8 @@ const registerFunction = async (req, res) => {
       res.status(404).send({ email: " This Email has been taken! "})
 
     }
-  const salt = await bcrypt.gensalt();
-  const hashingPassword = await bcrypt.hash(password , salt);
+  // const salt = await bcrypt.genSalt(10);
+  // const hashingPassword = await bcrypt.hash(password , salt);
   } 
   catch(err){
     res.status(500).json({err: err.message})
