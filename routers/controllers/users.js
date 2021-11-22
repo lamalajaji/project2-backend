@@ -2,58 +2,83 @@
 const userModel = require("./../../db/models/userSchema");
 const bcrypt = require("bcrypt");
 
-
-
-
 ////// Regester function => create a new user account
 const registerFunction = async (req, res) => {
   try {
     const { userName, userEmail, password } = req.body;
-
+    console.log(userName, userEmail, password);
     //// to fill all user requests
     if (!userName || !userEmail || !password) {
-      return res.status(400).send(" You Must Enter all Fields !");
+      return res.status(400).json(" You Must Enter all Fields !");
     }
     ///checking if password length >= 8
     if (password.length < 8) {
-      res.status(400).send(" the password must be at least 8 characters !");
+      res.status(400).json(" the password must be at least 8 characters !");
     }
     /// this will check if the Email already exist or not
     const existingEmail = await userModel.findOne({ userEmail: userEmail });
     if (existingEmail) {
-      res.status(404).send({ email: " This Email has been taken! " });
+      res.status(404).json({ email: " This Email has been taken! " });
     }
     // const salt = await bcrypt.genSalt(10);
     // const hashingPassword = await bcrypt.hash(password , salt);
-  } 
-  catch(err){
-    res.status(500).json({err: err.message})
+    const newUser = new userModel({
+      userName: userName,
+      userEmail: userEmail,
+      password: password,
+    });
+    newUser.save();
+        return res.status(200).json(newUser);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
   }
-}
+};
 
 
 
-////// login function 
-const loginFunction = async (req , res)=> {
-  const {userEmail , password} = req.body;
+////// login function
+const loginFunction = async (req, res) => {
+  const { userEmail, password } = req.body;
 
-  //// first check the Email 
+  //// first check the Email
   const user = await userModel.findOne({ userEmail: userEmail });
-   if (user){
-     //// then check the password
-     const validPass = await bcrypt.compare(password, user.password);
-     if (validPass) {
-       res.status(200).json({ message: "Valid Password" });
-     } else {
-       res.status(400).json({ error: "Invalid password ! " });
-     }
-     //// if the Email doesn't exists
-   } else {
-     res.status(401).json({error: " User Doesn't Exist! "})
-   }
-}
+  if (user) {
+    //// then check the password
+    const validPass = await bcrypt.compare(password, user.password);
+    if (validPass) {
+      res.status(200).json({ message: "Valid Password" });
+    } else {
+      res.status(400).json({ error: "Invalid password ! " });
+    }
+    //// if the Email doesn't exists
+  } else {
+    res.status(401).json({ error: " User Doesn't Exist! " });
+  }
+};
+
+////// update the name of user & user's password
+const updateUserInfo = (req, res) => {
+  const { userName } = req.body;
+  const { userEmail } = req.params;
+
+  userModel
+    .findOneAndUpdate(
+      { userName: `${userEmail}` },
+      { $set: { userName: userName } },
+      { new: true }
+    )
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => res.json(err.message));
+};
+
+///// delete user account function
 
 
+
+
+///// a functon to get all users
 /// i create this function just to check if my functions are doing well or nah hehe
 const getAllUsers = (req, res) => {
   userModel
@@ -69,28 +94,27 @@ const getAllUsers = (req, res) => {
 
 
 
+//// But first it will check if the Email already exists or not
+// userModel.findOne({ userEmail: req.body.userEmail }).then((user) => {
+//   if (user) {
+//     return res.status(404).send({ email: " This Email has been taken! " });
+
+//     //// de not case :
+//   } else {
+//     const newUser = new userModel({
+//       userName: req.body.userName,
+//       userEmail: req.body.userEmail,
+//       password: req.body.password,
+//     });
+//     newUser.save();
+//     return res.status(200).json(newUser);
+//   }
+// });
 
 
-
-
-  //// But first it will check if the Email already exists or not
-  // userModel.findOne({ userEmail: req.body.userEmail }).then((user) => {
-  //   if (user) {
-  //     return res.status(404).send({ email: " This Email has been taken! " });
-      
-  //     //// de not case :
-  //   } else {
-  //     const newUser = new userModel({
-  //       userName: req.body.userName,
-  //       userEmail: req.body.userEmail,
-  //       password: req.body.password,
-  //     });
-  //     newUser.save();
-  //     return res.status(200).json(newUser);
-  //   }
-  // });
-
-
-///// a functon to get all users
-
-module.exports = { registerFunction, getAllUsers, loginFunction };
+module.exports = {
+  registerFunction,
+  getAllUsers,
+  loginFunction,
+  updateUserInfo,
+};

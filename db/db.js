@@ -8,7 +8,7 @@ dotenv.config();
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true
+  // useCreateIndex: true,
 };
 
 
