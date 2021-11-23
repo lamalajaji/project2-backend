@@ -9,16 +9,16 @@ const registerFunction = async (req, res) => {
     console.log(userName, userEmail, password);
     //// to fill all user requests
     if (!userName || !userEmail || !password) {
-      return res.status(400).json(" You Must Enter all Fields !");
+      return res.status(400).json({message:" You Must Enter all Fields !"});
     }
     ///checking if password length >= 8
     if (password.length < 8) {
-      res.status(400).json(" the password must be at least 8 characters !");
+      res.status(400).json({message: " the password must be at least 8 characters !"});
     }
     /// this will check if the Email already exist or not
     const existingEmail = await userModel.findOne({ userEmail: userEmail });
     if (existingEmail) {
-      res.status(404).json({ email: " This Email has been taken! " });
+      res.status(404).json({ message: " This Email has been taken! " });
     }
     // const salt = await bcrypt.genSalt(10);
     // const hashingPassword = await bcrypt.hash(password , salt);
@@ -28,7 +28,7 @@ const registerFunction = async (req, res) => {
       password: password,
     });
     newUser.save();
-        return res.status(200).json(newUser);
+        return res.status(200).json({massage: "Sign Up Successfully"});
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
