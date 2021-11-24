@@ -9,8 +9,7 @@ const designerSchema = new mongoose.Schema({
   userEmail: { type: String, required: true, unique: true, trim: true },
   password: { type: String, required: true, trim: true, minlength: 8 },
   profilePic: { type: String },
-  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
-  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
+ 
 });
 
 
