@@ -12,7 +12,6 @@ usersRouter.get("/login", loginFunction);
 usersRouter.get("/allusers", getAllUsers);
 usersRouter.put("/:userEmail", updateUserInfo);
 
-
 //// Designers routers
 const {
   createDesignerAccFunc,

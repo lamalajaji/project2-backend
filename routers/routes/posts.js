@@ -6,7 +6,9 @@ const {
   addComments,
   allComments,
   newDesigner,
-  getdesigners
+  getdesigners,
+  newProject,
+  getProjects
 } = require("./../controllers/posts");
 const postsRouter = express.Router();
 
@@ -18,6 +20,9 @@ postsRouter.post("/addcomment/:id", addComments);
 postsRouter.get("/allcomments", allComments);
 postsRouter.post("/designer", newDesigner);
 postsRouter.get("/designers", getdesigners);
+postsRouter.post("/project", newProject);
+postsRouter.get("/projects", getProjects);
+
 
 
 
