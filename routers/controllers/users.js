@@ -58,9 +58,8 @@ const loginFunction = async (req, res) => {
 
 ////// update the name of user & user's password
 const updateUserInfo = (req, res) => {
-  const { userName } = req.body;
-  const { userEmail } = req.params;
-
+  const { userName , userEmail, password} = req.body;
+  
   userModel
     .findOneAndUpdate(
       { userName: `${userEmail}` },

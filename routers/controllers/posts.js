@@ -3,7 +3,6 @@ const postModel = require("./../../db/models/postsSchema");
 const designerSchema = require("./../../db/models/designersSchema");
 const projectsModel = require("./../../db/models/projectSchema");
 
-
 ////// create a new post function (post)
 const newPost = async (req, res) => {
   try {
@@ -30,7 +29,8 @@ const newPost = async (req, res) => {
 const getPosts = async (req, res) => {
   try {
     postModel
-      .find({}).populate("createdBy")
+      .find({})
+      .populate("createdBy")
       .then((result) => {
         res.status(200).json(result);
       });
@@ -39,21 +39,20 @@ const getPosts = async (req, res) => {
   }
 };
 
-///// add designers function 
+///// add designers function
 
 const newDesigner = async (req, res) => {
   try {
     const userName = req.body.userName;
     const userEmail = req.body.userEmail;
-        const password = req.body.password;
-        const profilePic = req.body.profilePic;
-
+    const password = req.body.password;
+    const profilePic = req.body.profilePic;
 
     const Post = await new designerSchema({
       userName: userName,
       userEmail: userEmail,
       password: password,
-      profilePic : profilePic
+      profilePic: profilePic,
     });
     await Post.save();
     res.status(200).json({ message: "designer has been added " });
@@ -62,15 +61,12 @@ const newDesigner = async (req, res) => {
   }
 };
 
-
 ////// get All designers
 const getdesigners = async (req, res) => {
   try {
-    designerSchema
-      .find({})
-      .then((result) => {
-        res.status(200).json(result);
-      });
+    designerSchema.find({}).then((result) => {
+      res.status(200).json(result);
+    });
   } catch (error) {
     res.json({ error });
   }
@@ -81,35 +77,47 @@ const addComments = async (req, res) => {
   const comment = req.body.comment;
   const id = req.body.id;
   const postId = req.body.postId;
-  const newComment = await new commentSchema({
-    comment: comment,
-    postId: postId,
-    postedBy: id
-  });
-  await newComment.save();
-  res.status(200).json("comment has been added !")
-
+  const newComment = { comment: comment, postId: postId, postedBy: id };
+  postModel
+    .findOneAndUpdate(
+      { _id: postId },
+      { $push: { comments: newComment } },
+      { new: true }
+    )
+    .exec()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 };
 
-
-
 ////// get all comments
-const allComments= (req,res)=>{
+const allComments = (req, res) => {
   try {
-    commentSchema
-      .find({})
-      .then((result) => {
-        res.status(200).json(result);
-      });
+    commentSchema.find({}).then((result) => {
+      res.status(200).json(result);
+    });
   } catch (error) {
     res.json({ error });
   }
+};
+
+////// git comment By postId
+const findComments = async(req,res) => {
+  const postId = req.body
+  postModel
+    .findOne({ _id: postId })
+    .exec(comments)
+    .then((result) => {
+      res.status(200).json(result);
+    });
 }
 
-/////// add project function 
+/////// add project function
 const newProject = async (req, res) => {
   try {
-    
     const createdBy = req.body.createdBy;
     const media = req.body.media;
 
@@ -124,7 +132,7 @@ const newProject = async (req, res) => {
   }
 };
 
-//////// get all projects function 
+//////// get all projects function
 
 const getProjects = async (req, res) => {
   try {
@@ -138,11 +146,6 @@ const getProjects = async (req, res) => {
     res.json({ error });
   }
 };
-
-
-
-
-
 
 ///// delete specific post function
 const deletePost = async (req, res) => {
@@ -158,10 +161,6 @@ const deletePost = async (req, res) => {
     });
 };
 
-
-
-
-
 module.exports = {
   newPost,
   getPosts,
@@ -171,5 +170,6 @@ module.exports = {
   newProject,
   getProjects,
   newDesigner,
-  getdesigners
+  getdesigners,
+  findComments
 };
