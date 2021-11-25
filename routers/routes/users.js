@@ -10,7 +10,7 @@ const usersRouter = express.Router();
 usersRouter.post("/register", registerFunction);
 usersRouter.get("/login", loginFunction);
 usersRouter.get("/allusers", getAllUsers);
-usersRouter.put("/:userEmail", updateUserInfo);
+usersRouter.put("/ediprofile", updateUserInfo);
 
 //// Designers routers
 const {

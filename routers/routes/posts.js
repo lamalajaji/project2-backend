@@ -20,7 +20,6 @@ postsRouter.delete("/:postid", deletePost);
 postsRouter.put("/addcomment", addComments);
 postsRouter.get("/allcomments", allComments);
 postsRouter.get("/post/comments", findComments);
-
 postsRouter.post("/designer", newDesigner);
 postsRouter.get("/designers", getdesigners);
 postsRouter.post("/project", newProject);

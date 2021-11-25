@@ -57,20 +57,18 @@ const loginFunction = async (req, res) => {
 };
 
 ////// update the name of user & user's password
-const updateUserInfo = (req, res) => {
-  const { userName , userEmail, password} = req.body;
+const updateUserInfo = async (req, res) => {
+  const _id = req.body._id;
+  const { userName , password} = req.body;
   
-  userModel
-    .findOneAndUpdate(
-      { userName: `${userEmail}` },
-      { $set: { userName: userName } },
-      { new: true }
+  const user = await userModel.find({ _id: _id });
+  const edited = await userModel.findOneAndUpdate({_id: _id },
+      {userName: userName ? userName: user.userName ,
+      password : password? password: user.password}, {new: true} 
     )
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => res.json(err.message));
-};
+  res.status(200).json(edited);
+  
+  }
 
 ///// delete user account function
 

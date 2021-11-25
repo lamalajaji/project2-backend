@@ -105,15 +105,16 @@ const allComments = (req, res) => {
 };
 
 ////// git comment By postId
-const findComments = async(req,res) => {
-  const postId = req.body
-  postModel
+const findComments = async (req, res) => {
+  const postId = req.body.postId;
+  const comment = await postModel
     .findOne({ _id: postId })
-    .exec(comments)
     .then((result) => {
-      res.status(200).json(result);
+      res.status(200).json(result.comments);
     });
-}
+};
+
+
 
 /////// add project function
 const newProject = async (req, res) => {
@@ -171,5 +172,5 @@ module.exports = {
   getProjects,
   newDesigner,
   getdesigners,
-  findComments
+  findComments,
 };
