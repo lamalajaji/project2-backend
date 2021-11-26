@@ -7,13 +7,13 @@ const projectsModel = require("./../../db/models/projectSchema");
 const newPost = async (req, res) => {
   try {
     const title = req.body.title;
-    const artical = req.body.artical;
+    const post = req.body.post;
     const createdBy = req.body.createdBy;
     const media = req.body.media;
 
     const Post = await new postModel({
       title: title,
-      artical: artical,
+      post: post,
       createdBy: createdBy,
       media: media,
     });
@@ -37,6 +37,13 @@ const getPosts = async (req, res) => {
   } catch (error) {
     res.json({ error });
   }
+};
+/////// get post 
+const getPost = async (req, res) => {
+  const {id} = req.params;
+  const post = await postModel.findOne({ _id: id }).then((result) => {
+    res.status(200).json(result);
+  });
 };
 
 ///// add designers function
@@ -165,6 +172,7 @@ const deletePost = async (req, res) => {
 module.exports = {
   newPost,
   getPosts,
+  getPost,
   deletePost,
   addComments,
   allComments,

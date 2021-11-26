@@ -20,7 +20,17 @@ const postsSchema = new mongoose.Schema({
   ],
 
   createdAt: { type: Date, default: Date.now },
-  artical: { type: String },
+  // artical: { type: String },
+  post: [
+    {
+      part1: { type: String },
+      part2: { type: String },
+      part3: { type: String },
+      part4: { type: String },
+      part5: { type: String },
+      part6: { type: String },
+    },
+  ],
   comments: [
     {
       comment: { type: String },

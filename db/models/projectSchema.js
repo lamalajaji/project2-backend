@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 const projectsSchema = new mongoose.Schema({
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "Designer" },
-  
+
   media: [
     {
       img1: { type: String },
@@ -14,7 +14,8 @@ const projectsSchema = new mongoose.Schema({
       img3: { type: String },
       img4: { type: String },
       img5: { type: String },
-      vedio: { type: String },
+      vedio1: { type: String },
+      vedio2: { type: String },
     },
   ],
   createdAt: { type: Date, default: Date.now },

@@ -2,6 +2,7 @@ const express = require("express");
 const {
   newPost,
   getPosts,
+  getPost,
   deletePost,
   addComments,
   allComments,
@@ -15,6 +16,8 @@ const postsRouter = express.Router();
 
 postsRouter.post("/post", newPost);
 postsRouter.get("/posts", getPosts);
+postsRouter.get("/post/:id", getPost);
+
 // postsRouter.put("/:postid", editPost);
 postsRouter.delete("/:postid", deletePost);
 postsRouter.put("/addcomment", addComments);
